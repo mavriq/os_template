@@ -1,0 +1,7 @@
+
+[Midnight-Commander]
+skin=/etc/skel/.config/mc/skins/modarcon16-defbg.ini
+
+[Layout]
+menubar_visible=0
+
