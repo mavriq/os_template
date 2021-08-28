@@ -67,23 +67,17 @@ ${USER_TYPE}➜$color_off ";
     local get_cursor_pos='\033[6n'      # ask term for the cursor position
     # local _garbage                      # env for first part of the response
     local CURPOS                        # env for cursor position
-
-    # read cursor position
-    {
-        # local _sigint=$(trap | grep -E 'SIGINT$')
-        # trap '' SIGINT          # disable Ctrl+C
-        (
-            echo -n ''          # delay
-            echo -en "\033[6n"  # send esc to get cursor position
-        ) & read -rsdR CURPOS   # read cursor position
-        fg &>/dev/null
+    __cp() {
+        local CURPOS                        # env for cursor position
+        echo -n ''          # delay
+        echo -en "\033[6n"  # send esc to get cursor position
+        read -rsdR CURPOS   # read cursor position
         CURPOS="${CURPOS##*;}"
-        # if [[ -z "${_sigint}" ]]; then # restore Ctrl+C
-        #     trap 2
-        # else
-        #     eval "${_sigint}"
-        # fi
-    } 2>/dev/null
+        return "${CURPOS}"
+    }
+    __cp
+    CURPOS=$?
+    unset __cp
 
     local color_error='\033[41;37m'
     local color_error_off='\033[m\017'
